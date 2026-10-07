@@ -1,0 +1,623 @@
+SQL & Hive Queries :
+******************
+
+1Q : Write a SQL code for union all and union ?
+
+Ans : 
+
+-- Creating alpha table
+create table alpha (
+  name varchar(255),
+  branch varchar(255),
+marks int);
+
+-- inserting values in it
+insert into alpha (name, branch, marks)
+values
+("Anusha", "ECE", 85),
+("Bindhu", "CSE", 80),
+("Chitra", "EEE", 75),
+("Anusha", "ECE", 85),
+("Divya", "CSE", 75);
+
+
+-- creating beta table
+create table beta (
+  name varchar(255),
+  branch varchar(255),
+marks int);
+
+-- inserting values in it
+insert into beta (name, branch, marks)
+values
+("Eesha", "Civil", 85),
+("Fathima", "Mech", 80),
+("Fathima", "Mech", 80),
+("Ganga", "ECE", 85),
+("Harika", "Chem", 75);
+
+-- union all : It includes duplicate rows also             // union all code
+select * from alpha
+union all
+select * from beta
+
+-- output :
+name	branch	marks
+Anusha	ECE	85
+Bindhu	CSE	80
+Chitra	EEE	75
+Anusha	ECE	85
+Divya	CSE	75
+Eesha	Civil	85
+Fathima	Mech	80
+Fathima	Mech	80
+Ganga	ECE	85
+Harika	Chem	75
+
+-- union : It includes distinct rows only and drops duplicate rows      // union code
+select * from alpha
+union
+select * from beta
+
+-- output :
+name	branch	marks
+Anusha	ECE	85
+Bindhu	CSE	80
+Chitra	EEE	75
+Divya	CSE	75
+Eesha	Civil	85
+Fathima	Mech	80
+Ganga	ECE	85
+Harika	Chem	75
+====================================================================================================================================================================
+2Q : Write a SQL code for Inner, Left, Right, Full, Left Semi and Left Anti joins.
+
+Ans : 
+-- creating employees table
+create table employees (
+  emp_name varchar(255),
+  emp_dept_id int,
+emp_salary int);
+
+-- adding values into it
+insert into employees (emp_name, emp_dept_id, emp_salary)
+values
+("Anusha", 101, 20500),
+("Bindhu", 201, 30500),
+("Anusha", 101, 20500),
+("Chitra", 301, 45200),
+("Divya", 501, 25500);
+
+-- creating department table
+create table department (
+  dept_name varchar(255),
+  dept_id int);
+
+-- adding values into it
+insert into department (dept_name, dept_id)
+values
+("IT", 101),
+("Sales", 201),
+("Marketing", 401),
+("Finance", 601);
+
+
+-- Inner Join :             // inner join code
+select * from employees e
+inner join department d on e.emp_dept_id=d.dept_id;
+
+-- Inner Join output :
+emp_name  emp_dept_id  emp_salary  dept_name  dept_id
+Anusha	   101	        20500	     IT	       101
+Bindhu	   201	        30500	     Sales     201
+Anusha	   101	        20500	     IT	       101
+
+-- Left Join :             // left join code
+select * from employees e
+left join department d on e.emp_dept_id=d.dept_id;
+
+-- Left Join output :
+emp_name  emp_dept_id  emp_salary  dept_name  dept_id
+Anusha	    101	         20500 	      IT	101
+Bindhu	    201	         30500	     Sales	201
+Anusha	    101	         20500	      IT    	101
+Chitra	    301	         45200	      null      null	
+Divya	    501	         25500	      null      null	
+
+-- Right Join :             // right join code
+select * from employees e
+right join department d on e.emp_dept_id=d.dept_id;
+
+-- Right Join output :
+emp_name  emp_dept_id  emp_salary  dept_name  dept_id
+Anusha	   101	        20500	     IT	       101
+Bindhu	   201	        30500	     Sales     201
+Anusha	   101	        20500	     IT	       101
+null       null         null         Marketing 401
+null       null         null         Finance   601
+
+-- Full Join :             // full join code
+select * from employees e
+full join department d on e.emp_dept_id=d.dept_id;
+
+-- Full Join output :
+emp_name  emp_dept_id  emp_salary  dept_name  dept_id
+Anusha	   101	        20500	     IT	       101
+Bindhu	   201	        30500	     Sales     201
+Anusha	   101	        20500	     IT	       101
+Chitra	   301	        45200	     null      null	
+Divya	   501	        25500	     null      null	
+null       null         null         Marketing 401
+null       null         null         Finance   601
+
+-- Left Semi Join :             // left join code
+select * from employees e
+left semi join department d on e.emp_dept_id=d.dept_id;
+
+-- Left Semi Join output :
+emp_name  emp_dept_id  emp_salary
+Anusha	    101	         20500
+Bindhu	    201	         30500
+Anusha	    101	         20500
+
+-- Left Anti Join :             // left join code
+select * from employees e
+left anti join department d on e.emp_dept_id=d.dept_id;
+
+-- Left Anti Join output :
+emp_name  emp_dept_id  emp_salary
+Chitra	    301	         45200	
+Divya	    501	         25500
+====================================================================================================================================================================
+3Q : Write a SQL code for Window Functions (row_number, rank and dense_rank) ?
+
+Ans :
+-- 1) creating Students table
+create table Students (
+  name varchar(255),
+marks int);
+
+-- adding values into the table
+insert into Students (name, marks)
+values
+("Anusha", 95),
+("Bindhu", 90),
+("Chitra", 90),
+("Divya", 85)
+
+-- RowNumber, Rank and DenseRank code
+select name, marks,
+row_number() over( order by (marks) desc) as RowNumber,
+rank() over( order by (marks) desc) as Rank,
+dense_rank() over( order by (marks) desc) as DenseRank
+from Students;
+
+-- RowNumber, Rank and DenseRank table
+name    marks  RowNumber  Rank	 DenseRank
+Anusha	 95	 1	   1	   1
+Bindhu	 90	 2	   2	   2
+Chitra	 90	 3	   2	   2
+Divya	 85	 4	   4	   3
+
+
+
+-- 2) creating table with Department wise
+create table StudentsWithDepartmentWise (
+  name varchar(255),
+  department varchar(255),
+marks int);
+
+-- adding values into the table
+insert into StudentsWithDepartmentWise (name, department, marks)
+values
+("Anusha", "ECE", 95),
+("Bindhu", "ECE", 90),
+("Chitra", "ECE", 90),
+("Divya", "ECE", 85),
+("Eesha", "CSE", 80),
+("Fathima", "CSE", 80),
+("Ganga", "CSE", 80),
+("Harika", "CSE", 75)
+
+-- RowNumber, Rank and DenseRank code
+select name, department, marks,
+row_number() over (partition by (department) order by marks desc) as RowNumber,
+rank() over (partition by (department) order by marks desc) as Rank,
+dense_rank() over (partition by (department) order by marks desc) as DenseRank
+from StudentsWithDepartmentWise;
+
+-- RowNumber, Rank and DenseRank table with department wise
+name	department  marks  RowNumber  Rank  DenseRank
+Eesha	  CSE	     80	      1	       1	1
+Fathima	  CSE	     80	      2	       1	1
+Ganga	  CSE	     80	      3        1	1
+Harika	  CSE	     75	      4	       4	2
+Anusha	  ECE	     95	      1        1	1
+Bindhu	  ECE	     90	      2        2	2
+Chitra	  ECE	     90	      3	       2	2
+Divya	  ECE	     85       4	       4	3
+====================================================================================================================================================================
+4Q : Write a code for finding the Second highest and third highest marks ?
+
+Ans :
+-- 1) creating Students table
+create table Students (
+  name varchar(255),
+marks int);
+
+-- adding values into the table
+insert into Students (name, marks)
+values
+("Anusha", 95),
+("Bindhu", 90),
+("Chitra", 90),
+("Divya", 85);
+
+-- second highest marks code
+select name, marks
+from
+(select name, marks,
+dense_rank() over (order by (marks) desc) as DenseRank
+ from Students)
+where DenseRank=2;
+
+-- output :
+name	marks
+Bindhu	 90
+Chitra	 90
+
+-- third highest marks code
+select name, marks
+from
+(select name, marks,
+dense_rank() over (order by (marks) desc) as DenseRank
+ from Students)
+where DenseRank=3;
+
+-- output :
+name	marks
+Divya	 85
+
+
+-- 2) creating table with Department wise
+create table StudentsWithDepartmentWise (
+  name varchar(255),
+  department varchar(255),
+marks int);
+
+-- adding values into the table
+insert into StudentsWithDepartmentWise (name, department, marks)
+values
+("Anusha", "ECE", 95),
+("Bindhu", "ECE", 90),
+("Chitra", "ECE", 90),
+("Divya", "ECE", 85),
+("Eesha", "CSE", 80),
+("Fathima", "CSE", 80),
+("Ganga", "CSE", 80),
+("Harika", "CSE", 75);
+
+-- second highest marks department wise code
+select name, department, marks
+from
+(select name, department, marks,
+dense_rank() over (partition by (department) order by marks desc) as DenseRank
+ from StudentsWithDepartmentWise)
+where DenseRank=2;
+
+-- output :
+name	department  marks
+Harika	  CSE	     75
+Bindhu	  ECE	     90
+Chitra	  ECE	     90
+
+-- third highest marks department wise code
+select name, department, marks
+from
+(select name, department, marks,
+dense_rank() over (partition by (department) order by marks desc) as DenseRank
+ from StudentsWithDepartmentWise)
+where DenseRank=3;
+
+-- output :
+name	department  marks
+Divya	  ECE	     85
+====================================================================================================================================================================
+5Q : Write a SQL code for finding Min, Max, Sum, Avg salaries and count of the entire table and by department wise?
+
+Ans :
+-- creating a table
+create table Students (
+  name varchar(255),
+  branch varchar(255),
+marks int);
+
+-- adding values in it
+insert into Students (name, branch, marks)
+values
+("Anusha", "ECE", 85),
+("Bindhu", "ECE", 80),
+("Chitra", "ECE", 25),
+("Divya", "ECE", 95);
+
+-- Min, Max, Sum, Avg, count Salaries of a table
+select branch,
+min(marks) as MinMarks,
+max(marks) as MaxMarks,
+sum(marks) as SumMarks,
+avg(marks) as AvgMarks,
+count(marks) as TotalCount
+from Students;
+
+-- output :
+branch	MinMarks   MaxMarks   SumMarks   AvgMarks   TotalCount
+ECE	  25	     95	       285	  71.25         4
+
+
+-- creating a table
+create table Students (
+  name varchar(255),
+  branch varchar(255),
+marks int);
+
+-- adding values in it
+insert into Students (name, branch, marks)
+values
+("Anusha", "ECE", 85),
+("Bindhu", "ECE", 80),
+("Chitra", "ECE", 25),
+("Divya", "ECE", 95),
+("Eesha", "CSE", 99),
+("Fathima", "CSE", 35),
+("Ganga", "CSE", 85),
+("Harika", "CSE", 75)
+
+-- Min, Max, Sum, Avg, count Salaries department wise
+select branch,
+min(marks) as MinMarks,
+max(marks) as MaxMarks,
+sum(marks) as SumMarks,
+avg(marks) as AvgMarks,
+count(marks) as TotalCount
+from Students
+group by branch;
+
+-- output :
+branch	MinMarks   MaxMarks   SumMarks   AvgMarks   totalCount
+CSE	  35	     99	        294	  73.5          4
+ECE	  25	     95  	285	  71.25         4
+====================================================================================================================================================================
+6Q : Write a SQL code for doing group by on two columns?
+
+Ans :
+-- creating a table
+create table Employees (
+  name varchar(255),
+  department varchar(255),
+  area varchar(255),
+salary int);
+
+-- adding values into it
+insert into Employees (name, department, area, salary)
+values
+("Anusha","ECE","Hyd",20500),
+("Bindhu","ECE","Del",35000),
+("Chitra","ECE","Hyd",21500),
+("Divya","ECE","Kol",40500),
+("Eesha","CSE","Hyd",50000),
+("Fathima","CSE","Del",10500),
+("Ganga","CSE","Del",15000),
+("Harika","CSE","Kol",65000);
+
+-- group by on two columns code
+select department, area,
+min(salary) as MinSalary,
+max(salary) as MaxSalary,
+sum(salary) as SumSalary,
+avg(salary) as AvgSalary,
+count(salary) as TotalCount
+from Employees
+group by department, area;
+
+-- output :
+department  area  MinSalary   MaxSalary	SumSalary  AvgSalary  TotalCount
+CSE	    Del	   10500	15000	 25500	     12750	2
+CSE	    Hyd	   50000	50000	 50000       50000	1
+CSE	    Kol	   65000	65000	 65000       65000	1
+ECE	    Del	   35000	35000	 35000       35000	1
+ECE	    Hyd	   20500	21500	 42000       21000	2
+ECE	    Kol    40500	40500	 40500       40500	1
+====================================================================================================================================================================
+7Q : Write a SQL query for CASE expression?
+
+Case Expression :
+The CASE expression is used to define different results based on specified conditions in an SQL statement.
+The CASE expression goes through the conditions and stops at the first match (like an if-then-else statement).
+So, once a condition is true, it will stop processing and return the result.
+If no conditions are true, it returns the value in the ELSE clause. If there is no ELSE clause and no conditions are true, it returns NULL.
+
+-- input table : Customers
+customer_id	first_name	last_name	age	country
+1	           John	           Doe	        31	USA
+2	           Robert	   Luna	        22	USA
+3	           David	   Robinson	22	UK
+4	           John	           Reinhardt	25	UK
+5	           Betty	   Doe   	28	UAE
+
+-- case expression 1 :
+select customer_id, first_name, age,
+case
+when age = 25 then 'Major'
+when age > 25 then 'Adult'
+else 'Minor'
+end as AgeStatus
+from Customers;
+
+-- output table 1 :
+customer_id	first_name	age    AgeStatus
+1	         John	        31	Adult
+2	         Robert	        22	Minor
+3	         David	        22	Minor
+4	         John	        25	Major
+5	         Betty	        28	Adult
+
+-- case expression 2 :
+select *,
+case
+when age >= 25 then 'Major'
+else 'Minor'
+end as Age_Status
+from Customers;
+
+-- output table 2 :
+customer_id	first_name	last_name	age	country   Age_Status
+1	           John	           Doe	        31	USA       Major
+2	           Robert	   Luna	        22	USA       Minor
+3	           David	   Robinson	22	UK        Minor
+4	           John	           Reinhardt	25	UK        Major
+5	           Betty	   Doe   	28	UAE       Major
+====================================================================================================================================================================
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Coding :
+******
+***1Q : 1) Create a Students table with columns as StudentID, StudentName and StudentMarks.
+     2) Insert any random values into it.
+     3) Find the RowNumber, Rank and DenseRank for each student.
+     4) Find the Second highest rank from the table.
+     5) Find the third highest rank from the table.
+
+Ans : 1) create table Students (
+         StudentID int,
+         StudentName varchar(255),
+         StudentMarks int );
+
+      2) insert into Students (StudentID, StudentName, StudentMarks)
+         values (101,"Abhi",99), (102,"Ajay",95), (103,"Akhil",95), (104,"Arjun",90);
+
+      3) select StudentID, StudentName, StudentMarks,
+         row_number() over(order by ("StudentMarks") desc) as RowNumber,
+         rank() over(order by ("StudentMarks") desc) as Rank,
+         dense_rank() over(order by ("StudentMarks") desc) as DenseRank
+         from Students;
+
+      4) select StudentID, StudentName, StudentMarks from
+            (select StudentID, StudentName, StudentMarks,
+            dense_rank() over(order by ("StudentMarks") desc) as DenseRank
+            from Students)
+         where DenseRank=2;
+
+      5) select StudentID, StudentName, StudentMarks from
+            (select StudentID, StudentName, StudentMarks,
+            dense_rank() over(order by ("StudentMarks") desc) as DenseRank
+            from Students)
+         where DenseRank=3;
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+***2Q : 1) Create a StudentsDepartment table with columns as StudentID, StudentName, DepartmentName and studentMarks.
+     2) Insert any random values into it.
+     3) Find the RowNumber, Rank and DenseRank from each department wise.
+     4) Find the Second highest rank from each department wise.
+     5) Find the third highest rank from each department wise.
+     6) Find the sum, avg, min, max of student marks from each department.
+     7) Find the sum, avg, min, max, diff(max,min) of student marks from each department.
+     7) Find the sum, avg, min, max, diff(max,min) of 1st greatest and 3rd greatest student marks from each department.
+     7) Find the sum, avg, min, max, diff(max,min) of greatest two student marks from each department.
+
+Ans : 1) create table StudentsDepartment (
+         StudentID int,
+         StudentName varchar(255),
+         DepartmentName varchar(255),
+         StudentMarks int );
+
+      2) insert into StudentsDepartment (StudentID, StudentName, DepartmentName, StudentMarks)
+         values (101,"Abhi","ECE",99), (102,"Ajay","ECE",95), (103,"Akhil","ECE",95), (104,"Arjun","ECE",90),
+         (201,"Balu","CSE",90),(202,"Bharath","CSE",90),(203,"Bhuvi","CSE",90),(204,"Bindhu","CSE",80),(205,"Bittu","CSE",70);
+
+      3) select StudentID, StudentName, DepartmentName, StudentMarks,
+         row_number() over(partition by DepartmentName order by StudentMarks desc) as RowNumber,
+         rank() over(partition by DepartmentName order by StudentMarks desc) as Rank,
+         dense_rank() over(partition by DepartmentName order by StudentMarks desc) as DenseRank
+         from StudentsDepartment;
+
+      4) select StudentID, StudentName, DepartmentName, StudentMarks from
+            (select StudentID, StudentName, DepartmentName, StudentMarks,
+            dense_rank() over(partition by DepartmentName order by StudentMarks desc) as DenseRank
+            from StudentsDepartment)
+         where DenseRank = 2;
+
+      5) select StudentID, StudentName, DepartmentName, StudentMarks from
+            (select StudentID, StudentName, DepartmentName, StudentMarks,
+            dense_rank() over(partition by DepartmentName order by StudentMarks desc) as DenseRank
+            from StudentsDepartment)
+         where DenseRank = 3;
+
+      6) select DepartmentName,
+         sum(StudentMarks) as TotalMarks,
+         avg(StudentMarks) as AvgMarks, min(StudentMarks) as MinMarks,
+         max(StudentMarks) as MaxMarks
+         from StudentsDepartment
+         group by DepartmentName
+         order by DepartmentName;
+
+7) first approach :
+select DepartmentName, TotalMarks, AvgMarks, MinMarks, MaxMarks,
+MaxMarks-MinMarks as DiffMarks from
+(select DepartmentName,
+sum(StudentMarks) as TotalMarks,
+avg(StudentMarks) as AvgMarks,
+min(StudentMarks) as MinMarks,
+max(StudentMarks) as MaxMarks
+from StudentsDepartment
+group by DepartmentName
+order by DepartmentName desc)
+
+7) second approach :
+with CTE as
+(select DepartmentName,
+sum(StudentMarks) as TotalMarks,
+avg(StudentMarks) as AvgMarks,
+min(StudentMarks) as MinMarks,
+max(StudentMarks) as MaxMarks
+from StudentsDepartment
+group by DepartmentName
+order by DepartmentName desc)
+select DepartmentName, TotalMarks, AvgMarks, MinMarks, MaxMarks,
+MaxMarks-MinMarks as DiffMarks from CTE
+
+8)
+with CTE as 
+(select StudentID, StudentName, DepartmentName, StudentMarks,
+         row_number() over(partition by DepartmentName order by StudentMarks desc) as RowNumber,
+         rank() over(partition by DepartmentName order by StudentMarks desc) as Rank,
+         dense_rank() over(partition by DepartmentName order by StudentMarks desc) as DenseRank
+ from StudentsDepartment)
+ 
+ select DepartmentName,
+ sum(StudentMarks) as TotalMarks,
+ avg(StudentMarks) as AvgMarks,
+ min(StudentMarks) as MinMarks,
+ max(StudentMarks) as MaxMarks,
+ max(StudentMarks)-min(StudentMarks) as DiffMarks
+ from CTE
+group by DepartmentName;
+
+9)
+with CTE as
+(select  StudentID, StudentName, DepartmentName, StudentMarks, DenseRank from
+(select StudentID, StudentName, DepartmentName, StudentMarks,
+         row_number() over(partition by DepartmentName order by StudentMarks desc) as RowNumber,
+         rank() over(partition by DepartmentName order by StudentMarks desc) as Rank,
+         dense_rank() over(partition by DepartmentName order by StudentMarks desc) as DenseRank
+ from StudentsDepartment)
+where DenseRank in (1,2))
+ 
+ select DepartmentName,
+ sum(StudentMarks) as TotalMarks,
+ avg(StudentMarks) as AvgMarks,
+ min(StudentMarks) as MinMarks,
+ max(StudentMarks) as MaxMarks,
+ max(StudentMarks)-min(StudentMarks) as DiffMarks
+ from CTE
+ group by DepartmentName;
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
