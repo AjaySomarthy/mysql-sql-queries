@@ -1,11 +1,29 @@
 -- Tables list :
--- Company.Employees for DDL operations (might be deleted due to drop command usage)
--- Company.Managers for DML operations (data may not present due to dlete command usage)
+-- Company.Employees for DDL operations (create, alter, rename, truncate, drop)
+-- Company.Managers for DML operations (insert, update, delete)
+-- Company.Drivers for DQL operations (select, distinct, where, order by, limit, offset)
 -- School.Students for aggregate functions (min, max, sum, avg, count)
--- School.Teachers for null values
+-- School.Teachers for null values (is null, is not null)
 
+-- ------------------------------------------------------------------------------------------------------------
+-- 1) Drivers table : 
+
+create table Company.Drivers (
+id int, name varchar(255), shift varchar(255), salary int);
+
+insert into Company.Drivers (id, name, shift, salary)
+values
+(101, "Anusha", "Day", 60500),
+(201, "Bindhu", "Day", 55000),
+(101, "Anusha", "Day", 60500),
+(301, "Chitra", "Day", 50000),
+(401, "Divya", "Night", 45000),
+(501, "Eesha", "Night", 45000),
+(601, "Fathima", "Night", 35000);
+
+select * from Company.Drivers;
 -- ============================================================================================================
--- 1) Students table : 
+-- 2) Students table : 
 
 create database School;
 
@@ -25,7 +43,7 @@ values
 
 select * from school.students;
 -- ============================================================================================================
--- 2) Teachers table : 
+-- 3) Teachers table : 
 
 create table School.Teachers (
 name varchar(255), salary int);

@@ -1,35 +1,8 @@
-create table Company.Drivers (
-id int, name varchar(255), shift varchar(255), salary int);
+--  WHERE usage
 
-select * from Company.Drivers;
+-- WHERE usage with different operators [ = , > , >= , < , <= , <> , != , BETWEEN , LIKE , IN ]
 
-insert into Company.Drivers (id, name, shift, salary)
-values
-(101, "Anusha", "Day", 60500),
-(201, "Bindhu", "Day", 55000),
-(101, "Anusha", "Day", 60500),
-(301, "Chitra", "Day", 50000),
-(401, "Divya", "Night", 45000),
-(501, "Eesha", "Night", 45000),
-(601, "Fathima", "Night", 35000);
-
--- SELECT usage
--- selecting all the columns
-select * from Company.Drivers;
-
--- selecting only required columns
-select id, name, salary
-from Company.Drivers;
--- ============================================================================================================
--- SELECT DISTINCT usage
--- selecting one distinct column
-select distinct salary from Company.Drivers;
-
--- selecting multiple distinct columns
-select distinct name, salary
-from Company.Drivers;
--- ============================================================================================================
---  WHERE usage with different Operators
+-- Creation of Drivers table is avialable in tables
 
 -- where with = operator on Strings
 select * from company.drivers
