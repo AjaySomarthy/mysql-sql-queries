@@ -8,7 +8,6 @@ area varchar(255));
 
 select * from persons.persons_data2;
 
-
 -- This will get executed as there are no repeated values for id, age columns
 insert into persons.persons_data2
 values
@@ -55,6 +54,8 @@ modify name varchar(255) unique;
 -- deleting all the rows and again inserting the data
 delete from persons.persons_data2;
 
+select * from persons.persons_data2;
+
 insert into persons.persons_data2
 values
 (1, "Anusha", 21, "Ahmedabad"),
@@ -64,7 +65,7 @@ values
 alter table persons.persons_data2
 modify name varchar(255) unique;
 
--- this will throw an error, as age is unique now
+-- this will throw an error, as name is unique now
 insert into persons.persons_data2
 values
 (3, "Anusha", 23, "Ahmedabad")
