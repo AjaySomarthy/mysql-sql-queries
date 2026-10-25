@@ -1,17 +1,30 @@
--- INSERT INTO SELECT usage
+-- INSERT INTO usage
 
--- first creting a table
-create table company.managers2 (
-id2 int, name2 varchar(255), department2 varchar(255));
+-- first creating a table
+create table company.managers (
+id int, name varchar(255), department varchar(255));
 
--- first check the table data
+
+-- inserting into all the columns
+insert into company.managers (id, name, department)
+values
+(101, "Anusha", "Sales"),
+(201, "Bindhu", "Marketing"),
+(301, "Chitra", "Finance"),
+(401, "Divya", "IT");
+
 select * from company.managers;
-select * from company.managers2;
 
--- inserting all the data from managers to managers2
-insert into company.managers2 
-select * from company.managers;
 
--- inserting only id, name from managers to id2, name2 in managers2
-insert into company.managers2 (id2, name2)
-select id, name from company.managers;
+-- inserting into all the columns without mentioning column names
+insert into company.managers
+values
+(501, "Eesha",  "Banking"),
+(601, "Fathima", "Non-IT");
+
+
+-- insert into to required columns
+insert into company.managers (id,name)
+values
+(701, "Geetha"),
+(801, "Haima");
